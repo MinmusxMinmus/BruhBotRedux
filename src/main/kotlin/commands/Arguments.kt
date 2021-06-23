@@ -14,18 +14,14 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import commands.ArgumentTypes
-import commands.CommandArgument
-import commands.concat
+package commands
 
-fun main(args: Array<String>) {
-    println("""BruhBot Copyright (C) 2021 MinmusxMinmus
-    |This program comes with ABSOLUTELY NO WARRANTY.
-    |This is free software, and you are welcome to redistribute it under certain conditions.
-    |For additional details, see "GPL.txt" in the GitHub repository: 
-    |https://github.com/MinmusxMinmus/BruhBotRedux.
-    |""".trimMargin())
-
-    val temp: List<CommandArgument> = listOf(CommandArgument(ArgumentTypes.USER_ID, "User ID"), CommandArgument(ArgumentTypes.TEXT, "Desc2"))
-    println(temp.concat())
+enum class ArgumentTypes {
+    TEXT, USER_ID,
 }
+
+data class CommandArgument(val type: ArgumentTypes, val description: String)
+
+typealias CommandArgs = List<CommandArgument>
+
+fun CommandArgs.concat() = joinToString(separator = "> <", prefix = "<", postfix = ">") { it.description }
