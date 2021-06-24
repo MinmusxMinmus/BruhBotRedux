@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.User
 import java.time.Instant
 
-data class ExecutionEvent(val exception: Exception,
+data class ExecutionEvent(val exception: Exception?,
                           val timestamp: Instant,
                           val eventInformation: String,
                           val isError: Boolean)
@@ -34,27 +34,56 @@ data class CommandInformation(val channel: MessageChannel,
                               val failure: Boolean,
                               val errorMessage: String,)
 
-sealed class Command(val trigger: Message, val command: String, val help: String, val args: CommandArgs) {
+/**
+ * What is the objective with the command class? I want it to:
+ * - Be easily extendable by me (adding a new class, for example)
+ *   How? Hierarchy
+ *
+ * - Follow a hierarchy (so I can call the same methods for all commands)
+ *   How? Hierarchy
+ *
+ * - Let a user change the command name
+ *   How? Storing command name in persistence
+ *
+ * - Let a user change the command permissions
+ *   How? Storing permissions in persistence
+ *
+ * What is NOT the objective?
+ * - Have users add new commands through the bot
+ * - Have users change the command parameters
+ * - Have users change the command functionality
+ */
+abstract class Command(val trigger: Message, val command: String, val help: String, val args: CommandArgs) {
 
-    protected val events: MutableList<ExecutionEvent> = mutableListOf()
+    private val events: MutableList<ExecutionEvent> = mutableListOf()
 
-    val channel = trigger.channel
-    val author = trigger.author
-    val guild = trigger.guild
-    val jda = trigger.jda
+    val channel
+    get() = trigger.channel
 
-    lateinit var executionStart: Instant
+    val author
+    get() = trigger.author
+
+    val guild
+    get() = trigger.guild
+
+    val jda
+    get() = trigger.jda
+
+    val success
+    get() = events.none { it.isError }
+
+    val failure
+    get() = finished && events.last().isError
+
     var finished = false
 
-    val success: Boolean
-        get() = events.none { it.isError }
+    fun events() = events.toList()
 
-    val failure: Boolean
-        get() = finished && events.last().isError
+    fun addEvent(exception: Exception?, timestamp: Instant, message: String, isError: Boolean) = ExecutionEvent(exception, timestamp, message, isError)
 
     fun details() = CommandInformation(channel, author, guild, success, failure, events.last().eventInformation)
 
     fun structure(prefix: String) = "$prefix$command ${args.concat()}"
 
-    abstract fun execute()
+    abstract fun execute() : Boolean
 }

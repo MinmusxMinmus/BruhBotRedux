@@ -16,6 +16,7 @@ repositories {
 }
 
 dependencies {
+    implementation(fileTree("lib"))
     implementation("net.dv8tion:JDA:4.3.0_277")
     implementation(kotlin("stdlib"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
