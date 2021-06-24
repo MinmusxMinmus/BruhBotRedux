@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PersistenceLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/PersistenceLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
