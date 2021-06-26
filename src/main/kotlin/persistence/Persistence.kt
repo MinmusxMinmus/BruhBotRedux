@@ -30,15 +30,10 @@ import java.util.*
 typealias AtomMap<T> = MutableMap<String, T>
 typealias QuoteSet = MutableSet<Any>
 
-const val ANSWER_ATOM = "ANSWER"
-const val REACTION_ATOM = "REACTION"
-const val IDENTIFIER_ATOM = "ID"
-const val QUOTE_ATOM = "QUOTE"
-const val JSON_ATOM = "JSON"
-const val MEMBER_ATOM = "MEMBER"
-
 enum class DataManagementProcessor {
     INSTANCE;
+
+    val atoms = listOf("ANSWER", "REACTION", "ID", "QUOTE", "JSON", "MEMBER")
 
     val identifiers: AtomMap<String> = mutableMapOf()
     val answers: AtomMap<String> = mutableMapOf()
@@ -49,18 +44,16 @@ enum class DataManagementProcessor {
 
     lateinit var manager: StorageManager
 
-    fun addStr(col: AtomMap<String>, atom: Atom) = atom.items?.forEach {
+    private fun addStr(col: AtomMap<String>, atom: Atom) = atom.items?.forEach {
         col[it.toString()] = atom.getItem(it)?.iterator()?.next() ?: return@forEach
     }
-
-    fun addQuotes(atom: Atom) {
+    private fun addQuotes(atom: Atom) {
         atom.items?.forEach {
             val l: List<String> = LinkedList(atom.getItem(it))
             quotes += Quote(l[0], l[1], l[2], OffsetDateTime.parse(l[3]), it.toString())
         }
     }
-
-    fun addJSON(atom: Atom) {
+    private fun addJSON(atom: Atom) {
         val parser = JSONParser()
         var obj = JSONObject()
         atom.items?.forEach {
@@ -72,11 +65,13 @@ enum class DataManagementProcessor {
             }
         }
     }
-
-    fun addMember(atom: Atom) = atom.items?.forEach {
+    private fun addMember(atom: Atom) = atom.items?.forEach {
         members.put(it.toString(), HashSet(atom.getItem(it)))
     }
 
+    /**
+     * Initializes the processor instance. Make sure to call this before doing anything!
+     */
     fun init(filename: String) {
         try {
             manager = StorageManager(filename, Version.V100)
@@ -85,46 +80,27 @@ enum class DataManagementProcessor {
             return
         }
 
-        var atom: Atom?
         // Check if region exists first, adds if not
-        if (!manager.hasRegion(IDENTIFIER_ATOM)) manager.addRegion(IDENTIFIER_ATOM)
-        atom = manager.getRegion(IDENTIFIER_ATOM)
+        atoms.forEach { if (!manager.hasRegion(it)) manager.addRegion(it) }
+
+        var atom = manager.getRegion(atoms[0])
         addStr(identifiers, atom)
 
-        // Check if region exists first, adds if not
-        if (!manager.hasRegion(ANSWER_ATOM)) manager.addRegion(ANSWER_ATOM)
-        atom = manager.getRegion(ANSWER_ATOM)
+        atom = manager.getRegion(atoms[1])
         addStr(answers, atom)
 
-        // Check if region exists first, adds if not
-
-        // Check if region exists first, adds if not
-        if (!manager.hasRegion(REACTION_ATOM)) manager.addRegion(REACTION_ATOM)
-        atom = manager.getRegion(REACTION_ATOM)
+        atom = manager.getRegion(atoms[2])
         addStr(reactions, atom)
 
-        // Check if region exists first, adds if not
-
-        // Check if region exists first, adds if not
-        if (!manager.hasRegion(QUOTE_ATOM)) manager.addRegion(QUOTE_ATOM)
-        atom = manager.getRegion(QUOTE_ATOM)
+        atom = manager.getRegion(atoms[3])
         addQuotes(atom)
 
-        // Check if region exists first, adds if not
-
-        // Check if region exists first, adds if not
-        if (!manager.hasRegion(JSON_ATOM)) manager.addRegion(JSON_ATOM)
-        atom = manager.getRegion(JSON_ATOM)
+        atom = manager.getRegion(atoms[4])
         addJSON(atom)
 
-        // Check if region exists first, adds if not
-
-        // Check if region exists first, adds if not
-        if (!manager.hasRegion(MEMBER_ATOM)) manager.addRegion(MEMBER_ATOM)
-        atom = manager.getRegion(MEMBER_ATOM)
+        atom = manager.getRegion(atoms[5])
         addMember(atom)
     }
-
 
 
 }
