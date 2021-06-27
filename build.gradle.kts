@@ -18,11 +18,11 @@ repositories {
 dependencies {
     implementation(fileTree("lib"))
     implementation(kotlin("stdlib"))
-    implementation("net.dv8tion:JDA:4.3.0_277")
-    implementation("com.googlecode.json-simple:json-simple:1.1.1")
+    implementation(group = "net.dv8tion", name = "JDA", version = "4.3.0_277")
+    implementation(group = "com.googlecode.json-simple", name = "json-simple", version = "1.1.1")
     implementation(group = "org.slf4j", name = "slf4j-log4j12", version = "1.7.31")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "5.6.0")
+    testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine")
 }
 
 tasks.test {
