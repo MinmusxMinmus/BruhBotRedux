@@ -30,9 +30,7 @@ import java.util.*
 typealias AtomMap<T> = MutableMap<String, T>
 typealias QuoteSet = MutableSet<Any>
 
-enum class DataManagementProcessor {
-    INSTANCE;
-
+object DataManagementProcessor {
     val atoms = listOf("ANSWER", "REACTION", "ID", "QUOTE", "JSON", "MEMBER")
 
     val identifiers: AtomMap<String> = mutableMapOf()
