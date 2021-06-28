@@ -14,18 +14,31 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import commands.ArgumentTypes
-import commands.CommandArgument
-import commands.concat
+import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.requests.GatewayIntent
+import java.util.*
 
 fun main(args: Array<String>) {
+    // Arg check
+    if (args.size != 1) {
+        println("Bad arguments: include the bot token (and only that!)")
+        return
+    }
+
+    // Copyright shenanigans
     println("""BruhBot Copyright (C) 2021 MinmusxMinmus
     |This program comes with ABSOLUTELY NO WARRANTY.
     |This is free software, and you are welcome to redistribute it under certain conditions.
     |For additional details, see "GPL.txt" in the GitHub repository: 
-    |https://github.com/MinmusxMinmus/BruhBotRedux.
+    |https://github.com/MinmusxMinmus/BruhBotRedux/blob/master/GPL.txt
     |""".trimMargin())
 
-    val temp: List<CommandArgument> = listOf(CommandArgument(ArgumentTypes.USER_ID, "User ID"), CommandArgument(ArgumentTypes.TEXT, "Desc2"))
-    println(temp.concat())
+    // Inicialization
+
+    val jda = JDABuilder.createDefault(args[0], EnumSet.allOf(GatewayIntent::class.java))
+        .setActivity(Activity.playing("with your feelings"))
+        .build()
+        .awaitReady()
+
 }
