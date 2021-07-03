@@ -14,6 +14,7 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import listeners.GuildCommandListener
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -35,9 +36,11 @@ fun main(args: Array<String>) {
     |""".trimMargin())
 
     // Inicialization
+    // TODO add persistence as RMI
 
     val jda = JDABuilder.createDefault(args[0], EnumSet.allOf(GatewayIntent::class.java))
         .setActivity(Activity.playing("with your feelings"))
+        .addEventListeners(GuildCommandListener("b!"))
         .build()
         .awaitReady()
 
