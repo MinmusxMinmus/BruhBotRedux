@@ -19,14 +19,28 @@ package commands
 import listeners.GuildCommandListener
 import model.Command
 import net.dv8tion.jda.api.entities.Message
+import other.Logging
+import other.logger
+import remote.model.ExecutionError
+import remote.model.ExecutionEvent
 import java.util.*
 
-class HelpCommand(override val trigger: Message) : Command(trigger) {
+class HelpCommand(override val trigger: Message) : Command(trigger), Logging {
+    companion object : Logging {
+        private var logger = logger()
+    }
+
     override fun declaration() = CommandDeclarations.HELP.getDeclaration()
 
     override fun exec() {
-        val builder = StringJoiner("\n")
-        GuildCommandListener.commands.sortedBy { it.name }.forEach { builder.add("**${it.name} ${it.parameters}**\n- ${it.description}") }
-        author.openPrivateChannel().queue { it?.sendMessage(builder.toString())?.queue() }
+        val builder = StringJoiner("\n\n")
+        GuildCommandListener.commands.sortedBy { it.name }.forEach {
+            builder.add("**${it.name} ${it.parameters}**\n- ${it.description}")
+            events.add(ExecutionEvent("Added information about command '${it.name}'"))
+        }
+        // TODO take into account character limit
+        author.openPrivateChannel().queue {
+            it?.sendMessage(builder.toString())?.queue() ?: events.add(ExecutionError("Unable to send DM to user. Private channel is null? ${it == null}", null))
+        }
     }
 }

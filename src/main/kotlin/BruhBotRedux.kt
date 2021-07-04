@@ -18,6 +18,8 @@ import listeners.GuildCommandListener
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
+import org.slf4j.LoggerFactory
+import java.time.LocalDate
 import java.util.*
 
 fun main(args: Array<String>) {
@@ -36,7 +38,15 @@ fun main(args: Array<String>) {
     |""".trimMargin())
 
     // Inicialization
-    // TODO add persistence as RMI
+
+    // Log beginning
+    val logger = LoggerFactory.getLogger("BruhBotRedux")
+    logger.info("--------------------------------------------------")
+    logger.info("----------------BruhBot Redux begin---------------")
+    logger.info("-----------------Date: ${LocalDate.now()}-----------------")
+    logger.info("--------------------------------------------------")
+
+    // TODO register core functionality in registry. What? What to add? Don't ask me, I don't know
 
     val jda = JDABuilder.createDefault(args[0], EnumSet.allOf(GatewayIntent::class.java))
         .setActivity(Activity.playing("with your feelings"))
