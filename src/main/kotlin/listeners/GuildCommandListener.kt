@@ -16,14 +16,19 @@
 
 package listeners
 
-import commands.HelpCommand
+import commands.CommandDeclarations
 import model.CommandDeclaration
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class GuildCommandListener(var prefix: String) : ListenerAdapter()  {
+    companion object {
+        private val commandSet = mutableSetOf(CommandDeclarations.HELP.getDeclaration(), CommandDeclarations.MODULEMANAGEMENT.getDeclaration())
+        val commands: Set<CommandDeclaration>
+        get() = commandSet.toSet()
+    }
 
-    val commands = mutableListOf(CommandDeclaration("help", "DMs you help", "(None)", HelpCommand::class))
+
 
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.message.contentRaw.startsWith(prefix)) {
@@ -34,7 +39,7 @@ class GuildCommandListener(var prefix: String) : ListenerAdapter()  {
                 else event.message.contentRaw.indexOf(' ')
             val strippedCommand = event.message.contentRaw.substring(begin, end)
 
-            commands.find { strippedCommand.equals(it.name) }?. let {
+            commandSet.find { strippedCommand.equals(it.name) }?. let {
                 // Finds the constructor that only takes the trigger, and creates the command. If there's no such
                 // constructor, it will print an error message and ignore the command.
                 val command = it.command.constructors
