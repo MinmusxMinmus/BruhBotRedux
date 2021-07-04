@@ -16,17 +16,13 @@
 
 package commands
 
-import listeners.GuildCommandListener
 import model.Command
 import net.dv8tion.jda.api.entities.Message
-import java.util.*
 
-class HelpCommand(override val trigger: Message) : Command(trigger) {
-    override fun declaration() = CommandDeclarations.HELP.getDeclaration()
+class ModuleCommand(override val trigger: Message) : Command(trigger) {
+    override fun declaration() = CommandDeclarations.MODULEMANAGEMENT.getDeclaration()
 
     override fun exec() {
-        val builder = StringJoiner("\n")
-        GuildCommandListener.commands.sortedBy { it.name }.forEach { builder.add("**${it.name} ${it.parameters}**\n- ${it.description}") }
-        author.openPrivateChannel().queue { it?.sendMessage(builder.toString())?.queue() }
+        TODO("Not yet implemented")
     }
 }
