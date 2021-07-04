@@ -19,8 +19,12 @@ import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.LoggerFactory
+import java.security.Permission
+import java.security.Policy
+import java.security.ProtectionDomain
 import java.time.LocalDate
 import java.util.*
+
 
 fun main(args: Array<String>) {
     // Arg check
@@ -28,6 +32,13 @@ fun main(args: Array<String>) {
         println("Bad arguments: include the bot token (and only that!)")
         return
     }
+
+    // Security manager shenanigans
+    val allPermissionPolicy = object : Policy() {
+        override fun implies(domain: ProtectionDomain?, permission: Permission?) = true
+    }
+    Policy.setPolicy(allPermissionPolicy)
+    System.getSecurityManager() ?: System.setSecurityManager(SecurityManager())
 
     // Copyright shenanigans
     println("""BruhBot Copyright (C) 2021 MinmusxMinmus
