@@ -23,6 +23,6 @@ class ModuleCommand(override val trigger: Message) : Command(trigger) {
     override fun declaration() = CommandDeclarations.MODULEMANAGEMENT.getDeclaration()
 
     override fun exec() {
-        TODO("Not yet implemented")
+        channel.sendMessage("trolled").queue()
     }
 }
