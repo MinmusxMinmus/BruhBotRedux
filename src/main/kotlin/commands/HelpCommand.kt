@@ -25,17 +25,27 @@ import remote.model.ExecutionError
 import remote.model.ExecutionEvent
 import java.util.*
 
-class HelpCommand(override val trigger: Message) : Command(trigger), Logging {
+class HelpCommand(trigger: Message) : Command(trigger), Logging {
     companion object : Logging {
         private var logger = logger()
     }
 
     override fun declaration() = CommandDeclarations.HELP.getDeclaration()
 
-    override fun exec() {
+    override fun execWhenBadArgs() {
+        channel.sendMessage("This takes no args, how do you fuck this up").queue()
+    }
+
+    override fun execWhenBadPerms() {
+        channel.sendMessage("Everyone can use this, how do you fuck this up").queue()
+    }
+
+    override fun execCommand() {
         val builder = StringJoiner("\n\n")
         GuildCommandListener.commands.sortedBy { it.name }.forEach {
-            builder.add("**${it.name} ${it.parameters}**\n- ${it.description}")
+            val paramBuilder = StringJoiner("> <", "<", ">")
+            it.parameters.forEach { paramBuilder.add("${it.first}: ${it.second.name}") }
+            builder.add("**${it.name} $paramBuilder**\n- ${it.description}")
             events.add(ExecutionEvent("Added information about command '${it.name}'"))
         }
         // TODO take into account character limit

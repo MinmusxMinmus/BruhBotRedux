@@ -18,6 +18,7 @@ package commands
 
 import model.CommandDeclaration
 import remote.model.AdminPermission
+import remote.model.KeywordParameter
 import remote.model.NoPermission
 
 enum class CommandDeclarations {
@@ -25,8 +26,20 @@ enum class CommandDeclarations {
 
     fun getDeclaration(): CommandDeclaration {
         return when (this) {
-            HELP -> CommandDeclaration("help", "DMs you help", "", HelpCommand::class, NoPermission())
-            MODULEMANAGEMENT -> CommandDeclaration("module", "Adds/Removes modules from the bot", "<add/remove> <module name>", ModuleCommand::class, AdminPermission())
+            HELP -> CommandDeclaration(
+                name = "help",
+                description = "DMs you help",
+                parameters = listOf(),
+                command = HelpCommand::class,
+                permission = NoPermission()
+            )
+            MODULEMANAGEMENT -> CommandDeclaration(
+                name = "module",
+                description = "Adds/Removes modules from the bot",
+                parameters = listOf("Mode" to KeywordParameter(), "Module name" to KeywordParameter()),
+                command = ModuleCommand::class,
+                permission = AdminPermission()
+            )
         }
     }
 }

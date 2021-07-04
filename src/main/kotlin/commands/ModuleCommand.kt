@@ -18,11 +18,24 @@ package commands
 
 import model.Command
 import net.dv8tion.jda.api.entities.Message
+import remote.model.ParameterError
 
-class ModuleCommand(override val trigger: Message) : Command(trigger) {
+class ModuleCommand(trigger: Message) : Command(trigger) {
     override fun declaration() = CommandDeclarations.MODULEMANAGEMENT.getDeclaration()
 
-    override fun exec() {
+    override fun execCommand() {
         channel.sendMessage("trolled").queue()
+    }
+
+    override fun execWhenBadArgs() {
+        val builder = StringBuilder("Bad args lmao, here's the rundown:\n")
+
+        arguments.filter { it is ParameterError }.forEach { builder.append("/t- \"${it.valueStr}\"") }
+
+        channel.sendMessage(builder.toString()).queue()
+    }
+
+    override fun execWhenBadPerms() {
+        channel.sendMessage("Lmao no perms").queue()
     }
 }
