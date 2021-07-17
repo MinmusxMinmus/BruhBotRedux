@@ -16,11 +16,11 @@
 
 package commands
 
-import model.Command
+import model.SimpleCommand
 import net.dv8tion.jda.api.entities.Message
 import remote.model.ParameterError
 
-class ModuleCommand(trigger: Message) : Command(trigger) {
+class ModuleCommand(trigger: Message) : SimpleCommand(trigger) {
     override fun declaration() = CommandDeclarations.MODULEMANAGEMENT.getDeclaration()
 
     override fun execCommand() {

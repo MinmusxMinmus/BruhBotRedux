@@ -17,7 +17,7 @@
 package commands
 
 import listeners.GuildCommandListener
-import model.Command
+import model.SimpleCommand
 import net.dv8tion.jda.api.entities.Message
 import other.Logging
 import other.logger
@@ -25,7 +25,7 @@ import remote.model.ExecutionError
 import remote.model.ExecutionEvent
 import java.util.*
 
-class HelpCommand(trigger: Message) : Command(trigger), Logging {
+class HelpCommand(trigger: Message) : SimpleCommand(trigger), Logging {
     companion object : Logging {
         private var logger = logger()
     }
