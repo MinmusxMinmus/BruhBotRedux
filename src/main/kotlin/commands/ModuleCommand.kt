@@ -16,21 +16,47 @@
 
 package commands
 
+import listeners.GuildCommandListener
 import model.SimpleCommand
 import net.dv8tion.jda.api.entities.Message
+import other.Logging
+import other.logger
+import remote.BBModule
 import remote.model.ParameterError
+import java.rmi.registry.LocateRegistry
 
-class ModuleCommand(trigger: Message) : SimpleCommand(trigger) {
+class ModuleCommand(trigger: Message) : SimpleCommand(trigger), Logging {
+
+    companion object : Logging {
+        private val logger = logger()
+    }
+
     override fun declaration() = CommandDeclarations.MODULEMANAGEMENT.getDeclaration()
 
     override fun execCommand() {
-        channel.sendMessage("trolled").queue()
+        val cmd = arguments[0]
+        val module = arguments[1]
+
+        with(LocateRegistry.getRegistry()) {
+            when (cmd.valueStr) {
+                "load" -> try {
+                    val obj = lookup(module.valueStr) as BBModule
+                    // For now just dump it all
+                    GuildCommandListener.addCommands(obj.commands())
+                    channel.sendMessage("Success!").queue()
+                } catch (e: Exception) {
+                    logger.warn("Unable to find module \"${module.valueStr}\" in RMI registry")
+                    channel.sendMessage("Can't find that module").queue()
+                }
+            }
+        }
+
     }
 
     override fun execWhenBadArgs() {
         val builder = StringBuilder("Bad args lmao, here's the rundown:\n")
 
-        arguments.filter { it is ParameterError }.forEach { builder.append("/t- \"${it.valueStr}\"") }
+        arguments.filterIsInstance<ParameterError>().forEach { builder.append("/t- \"${it.valueStr}\"") }
 
         channel.sendMessage(builder.toString()).queue()
     }
