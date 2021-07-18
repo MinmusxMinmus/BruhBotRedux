@@ -29,6 +29,10 @@ class GuildCommandListener(var prefix: String) : ListenerAdapter(), Logging {
         val commands: Set<CommandDeclaration>
         get() = commandSet.toSet()
         private val logger = logger()
+
+        fun addCommands(cmds: Set<CommandDeclaration>) {
+            commandSet.addAll(cmds)
+        }
     }
 
 
