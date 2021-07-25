@@ -65,6 +65,7 @@ fun main(args: Array<String>) {
 
     // TODO register core functionality in registry. What? What to add? Don't ask me, I don't know
 
+    logger.info("Building JDA")
     val jda = JDABuilder.createDefault(args[0], EnumSet.allOf(GatewayIntent::class.java))
         .setActivity(Activity.playing("with your feelings"))
         .addEventListeners(GuildCommandListener("b!"))
@@ -73,6 +74,7 @@ fun main(args: Array<String>) {
     logger.info("JDA built")
 
     BBModule.jda = jda
+    logger.info("Registering basic module")
     ModuleManager.addModule(BasicModule(), false)
     logger.info("Basic module registered")
 }
