@@ -40,10 +40,11 @@ object ModuleManager {
         return SimpleCommandMap.filter { it.value.containsKey(commandName) }.values.first()[commandName]
     }
 
-    fun getModule(commandName: String): BBModule {
-        return SimpleCommandMap.filter { it.value.containsKey(commandName) }.keys.first()
+    fun getModule(commandName: String): BBModule? {
+        return SimpleCommandMap.filter { it.value.containsKey(commandName) }.keys.firstOrNull()
     }
 
-    fun executeCommand(declaration: SimpleCommandDeclaration, message: Message) =
-        SimpleCommandMap.filter { it.value.containsKey(declaration.name) }.keys.first().executeSimpleCommand(declaration, MessageOrigin.from(message))
+    fun executeCommand(declaration: SimpleCommandDeclaration, message: Message) {
+        SimpleCommandMap.filter { it.value.containsKey(declaration.name) }.keys.firstOrNull()?.executeSimpleCommand(declaration, MessageOrigin.from(message))
+    }
 }
