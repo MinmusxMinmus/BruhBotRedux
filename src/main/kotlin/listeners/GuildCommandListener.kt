@@ -22,7 +22,7 @@ import other.ModuleManager
 import shared.Logging
 import shared.logger
 
-class GuildCommandListener(var prefix: String) : ListenerAdapter(), Logging {
+class GuildCommandListener(private var prefix: String) : ListenerAdapter(), Logging {
     companion object : Logging {
         private val logger = logger()
     }
@@ -43,11 +43,10 @@ class GuildCommandListener(var prefix: String) : ListenerAdapter(), Logging {
             val strippedCommand = event.message.contentRaw.substring(begin, end)
             logger.debug("Message's alleged command is '$strippedCommand'. Searching")
             ModuleManager.getSimpleCommand(strippedCommand)?.let {
-                val modulename = ModuleManager.getModule(strippedCommand)?.name();
-                logger.debug("Command '$strippedCommand' found in module '$modulename'. Executing")
+                val moduleName = ModuleManager.getModule(strippedCommand)?.name()
+                logger.debug("Command '$strippedCommand' found in module '$moduleName'. Sending execute request to the module")
                 ModuleManager.executeCommand(it, event.message)
-                logger.info("Command '$strippedCommand' executed")
-                logger.debug("(Refers to command from module '$modulename')")
+                logger.info("Request to execute command '$strippedCommand' in module '$moduleName' sent")
             } ?: logger.info("Command '$strippedCommand' not found. Cannot execute")
         }
     }
