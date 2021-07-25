@@ -14,15 +14,16 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package commands
+package base.simpleCommands
 
-import listeners.GuildCommandListener
-import model.SimpleCommand
+import base.CommandDeclarations
 import net.dv8tion.jda.api.entities.Message
-import other.Logging
-import other.logger
-import remote.model.ExecutionError
-import remote.model.ExecutionEvent
+import other.ModuleManager
+import shared.ExecutionError
+import shared.ExecutionEvent
+import shared.Logging
+import shared.logger
+import simpleCommands.SimpleCommand
 import java.util.*
 
 class HelpCommand(trigger: Message) : SimpleCommand(trigger), Logging {
@@ -42,7 +43,7 @@ class HelpCommand(trigger: Message) : SimpleCommand(trigger), Logging {
 
     override fun execCommand() {
         val builder = StringJoiner("\n\n")
-        GuildCommandListener.commands.sortedBy { it.name }.forEach {
+        ModuleManager.commands.forEach {
             val paramBuilder = StringJoiner("> <", "<", ">")
             it.parameters.forEach { paramBuilder.add("${it.first}: ${it.second.name}") }
             builder.add("**${it.name} $paramBuilder**\n- ${it.description}")

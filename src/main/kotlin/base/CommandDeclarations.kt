@@ -14,30 +14,29 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package commands
+package base
 
-import model.CommandDeclaration
-import remote.model.AdminPermission
-import remote.model.KeywordParameter
-import remote.model.NoPermission
+import shared.AdminPermission
+import shared.KeywordParameter
+import shared.NoPermission
+import shared.StringParameter
+import simpleCommands.SimpleCommandDeclaration
 
 enum class CommandDeclarations {
     HELP, MODULEMANAGEMENT;
 
-    fun getDeclaration(): CommandDeclaration {
+    fun getDeclaration(): SimpleCommandDeclaration {
         return when (this) {
-            HELP -> CommandDeclaration(
+            HELP -> SimpleCommandDeclaration(
                 name = "help",
                 description = "DMs you help",
                 parameters = listOf(),
-                command = HelpCommand::class,
                 permission = NoPermission()
             )
-            MODULEMANAGEMENT -> CommandDeclaration(
+            MODULEMANAGEMENT -> SimpleCommandDeclaration(
                 name = "module",
                 description = "Adds/Removes modules from the bot",
-                parameters = listOf("Mode" to KeywordParameter(), "Module name" to KeywordParameter()),
-                command = ModuleCommand::class,
+                parameters = listOf("Mode" to KeywordParameter(setOf("load", "list")), "Module name" to StringParameter(canContainSpaces = false)),
                 permission = AdminPermission()
             )
         }

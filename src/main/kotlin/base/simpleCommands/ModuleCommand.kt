@@ -14,16 +14,19 @@
  * along with "BruhBot".  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package commands
+package base.simpleCommands
 
-import listeners.GuildCommandListener
-import model.SimpleCommand
+import base.CommandDeclarations
 import net.dv8tion.jda.api.entities.Message
-import other.Logging
-import other.logger
-import remote.BBModule
-import remote.model.ParameterError
+import other.ModuleManager
+import rmi.BBModule
+import shared.Logging
+import shared.ParameterError
+import shared.logger
+import simpleCommands.SimpleCommand
+import java.rmi.NotBoundException
 import java.rmi.registry.LocateRegistry
+import java.util.*
 
 class ModuleCommand(trigger: Message) : SimpleCommand(trigger), Logging {
 
@@ -41,12 +44,22 @@ class ModuleCommand(trigger: Message) : SimpleCommand(trigger), Logging {
             when (cmd.valueStr) {
                 "load" -> try {
                     val obj = lookup(module.valueStr) as BBModule
-                    // For now just dump it all
-                    GuildCommandListener.addCommands(obj.commands())
+                    ModuleManager.addModule(obj, true)
                     channel.sendMessage("Success!").queue()
-                } catch (e: Exception) {
+                    // TODO better exception handling
+                } catch (e: NotBoundException) {
                     logger.warn("Unable to find module \"${module.valueStr}\" in RMI registry")
-                    channel.sendMessage("Can't find that module").queue()
+                    logger.warn("Error: \n${e.stackTraceToString()}")
+                    channel.sendMessage("Can't find the module. Check logs for more details.").queue()
+                } catch (e: Exception) {
+                    logger.warn("Unable to load module \"${module.valueStr}\" from RMI registry")
+                    logger.warn("Error: \n${e.stackTraceToString()}")
+                    channel.sendMessage("Can't load the module, for some reason. Check logs for more details.").queue()
+                }
+                "list" -> try {
+                    // TODO prettify
+                    channel.sendMessage(Arrays.toString(list())).queue()
+                } catch (e: Exception) {
                 }
             }
         }
@@ -57,6 +70,8 @@ class ModuleCommand(trigger: Message) : SimpleCommand(trigger), Logging {
         val builder = StringBuilder("Bad args lmao, here's the rundown:\n")
 
         arguments.filterIsInstance<ParameterError>().forEach { builder.append("/t- \"${it.valueStr}\"") }
+        builder.append("\n\n")
+        events.forEach { builder.append("${it.timestamp} : ${it.info}") }
 
         channel.sendMessage(builder.toString()).queue()
     }
