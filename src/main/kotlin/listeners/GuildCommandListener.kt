@@ -43,10 +43,11 @@ class GuildCommandListener(var prefix: String) : ListenerAdapter(), Logging {
             val strippedCommand = event.message.contentRaw.substring(begin, end)
             logger.debug("Message's alleged command is '$strippedCommand'. Searching")
             ModuleManager.getSimpleCommand(strippedCommand)?.let {
-                logger.debug("Command '$strippedCommand' found in module '${ModuleManager.getModule(strippedCommand).name()}'. Executing")
+                val modulename = ModuleManager.getModule(strippedCommand)?.name();
+                logger.debug("Command '$strippedCommand' found in module '$modulename'. Executing")
                 ModuleManager.executeCommand(it, event.message)
                 logger.info("Command '$strippedCommand' executed")
-                logger.debug("(Refers to command from module '${it.name}')")
+                logger.debug("(Refers to command from module '$modulename')")
             } ?: logger.info("Command '$strippedCommand' not found. Cannot execute")
         }
     }
