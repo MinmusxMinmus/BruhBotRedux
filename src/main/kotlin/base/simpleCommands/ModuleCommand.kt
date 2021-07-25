@@ -43,23 +43,30 @@ class ModuleCommand(trigger: Message) : SimpleCommand(trigger), Logging {
         with(LocateRegistry.getRegistry()) {
             when (cmd.valueStr) {
                 "load" -> try {
+                    logger.info("Command was called in mode 'load'")
+                    logger.debug("Searching for module in registry")
                     val obj = lookup(module.valueStr) as BBModule
+                    logger.debug("Building JDA and adding module")
                     ModuleManager.addModule(obj, true)
+                    logger.info("Success loading module '${module.valueStr}'")
                     channel.sendMessage("Success!").queue()
                     // TODO better exception handling
                 } catch (e: NotBoundException) {
                     logger.warn("Unable to find module \"${module.valueStr}\" in RMI registry")
-                    logger.warn("Error: \n${e.stackTraceToString()}")
+                    logger.warn("Error: ${e.stackTraceToString()}")
                     channel.sendMessage("Can't find the module. Check logs for more details.").queue()
                 } catch (e: Exception) {
                     logger.warn("Unable to load module \"${module.valueStr}\" from RMI registry")
-                    logger.warn("Error: \n${e.stackTraceToString()}")
+                    logger.warn("Trace: \n${e.stackTraceToString()}")
                     channel.sendMessage("Can't load the module, for some reason. Check logs for more details.").queue()
                 }
                 "list" -> try {
+                    logger.info("Command was called in mode 'list'")
                     // TODO prettify
                     channel.sendMessage(Arrays.toString(list())).queue()
                 } catch (e: Exception) {
+                    logger.warn("Exception raised while executing command")
+                    logger.warn("Trace: ${e.stackTraceToString()}")
                 }
             }
         }
