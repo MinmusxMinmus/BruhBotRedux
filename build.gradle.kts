@@ -17,8 +17,8 @@ repositories {
 
 dependencies {
     implementation(fileTree("lib"))
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("reflect"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
 
     implementation(group = "net.dv8tion", name = "JDA", version = "4.3.0_277")
     implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.9.0")
