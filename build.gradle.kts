@@ -17,12 +17,12 @@ repositories {
 
 dependencies {
     implementation(fileTree("lib"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.5.21")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
 
     implementation(group = "net.dv8tion", name = "JDA", version = "4.3.0_277")
-    implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.9.0")
-    implementation(group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version = "2.7.3")
+    implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.14.1")
+    implementation(group = "com.fasterxml.jackson.dataformat", name = "jackson-dataformat-yaml", version = "2.13.0")
 }
 
 tasks.withType<KotlinCompile> {
