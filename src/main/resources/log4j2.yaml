@@ -17,7 +17,7 @@ Configuration:
         pattern: ${default-pattern}
       Filters:
         ThresholdFilter:
-          level: warn
+          level: info
 
     File:
       name: FileAppender
