@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.6.10"
 }
 
 group = "com.minmusxminmus"
@@ -17,8 +17,8 @@ repositories {
 
 dependencies {
     implementation(fileTree("lib"))
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.0")
+    implementation(kotlin("reflect"))
+    implementation(kotlin("stdlib"))
 
     implementation(group = "net.dv8tion", name = "JDA", version = "4.3.0_277")
     implementation(group = "org.apache.logging.log4j", name = "log4j-slf4j-impl", version = "2.14.1")
