@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="BruhBotLib-1.0.0 (2)">
+  <library name="BruhBotRMI.main">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/BruhBotLib-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/BruhBotRMI.main.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

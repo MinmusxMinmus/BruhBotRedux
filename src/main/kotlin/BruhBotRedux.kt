@@ -22,7 +22,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import org.slf4j.LoggerFactory
 import other.ModuleManager
 import rmi.BBModule
-import rmi.RMIModuleLoader
+import rmi.BruhBotModuleManager
 import java.rmi.registry.LocateRegistry
 import java.time.LocalDate
 import java.util.*
@@ -60,7 +60,7 @@ fun main(args: Array<String>) {
     logger.info("Registry created at port 1099")
 
     // Register basic module
-    RMIModuleLoader.register(BasicModule())
+    BruhBotModuleManager.register(BasicModule())
     logger.info("Basic command module registered")
 
     // TODO register core functionality in registry. What? What to add? Don't ask me, I don't know

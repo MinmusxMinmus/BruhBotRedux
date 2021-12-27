@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="BruhBotRMI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/BruhBotRMI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
